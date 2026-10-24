@@ -1,0 +1,510 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ujjun Studio</title>
+<meta name="description" content="유쭌 스튜디오 — 집중한 만큼 자라는 픽셀 친구와 함께하는 타이머 앱, 유쭌 타이머를 만들어요.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Silkscreen&display=swap">
+<style>/* 레이아웃: 밤하늘 아래 픽셀 정원(히어로, 실제로 움직이는 동물) → 세 걸음 → 친구들 → 기능 격자 → 출시 → 회사. 한 기둥 1120px
+   색: 밤 보라 + 새싹 초록 + 나무색. 낮(라이트)에는 아침 하늘 */
+:root{--sky1:#e9f2ff;--sky2:#fdf7ea;--bg:#fbf8f1;--panel:#ffffff;--panel2:#f3eee2;--ink:#221d33;--sub:#6b6385;--line:#e6dfcf;
+  --leaf:#2e9e5b;--leaf-hi:#7fe0a2;--wood:#a8754a;--gold:#c98a1a;--grass1:#7fcf6a;--grass2:#5fb050;--soil:#8a6040;--soil2:#6f4b31;--star:#ffffff00;
+  --f-disp:'Jua','Gowun Dodum',system-ui,sans-serif;--f-body:'Gowun Dodum','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;--f-px:'Silkscreen','DotGothic16',ui-monospace,monospace;
+  --r:22px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky1:#120f24;--sky2:#2a2150;--bg:#141126;--panel:#1d1936;--panel2:#252046;--ink:#f3eefc;--sub:#b3a9cf;--line:#322b55;
+  --leaf:#6fe08a;--leaf-hi:#9ff0b4;--wood:#c89466;--gold:#ffd36b;--grass1:#3f8f4a;--grass2:#2f6f3a;--soil:#5a3f2c;--soil2:#45301f;--star:#ffffffcc;color-scheme:dark}}
+:root[data-theme="dark"]{--sky1:#120f24;--sky2:#2a2150;--bg:#141126;--panel:#1d1936;--panel2:#252046;--ink:#f3eefc;--sub:#b3a9cf;--line:#322b55;
+  --leaf:#6fe08a;--leaf-hi:#9ff0b4;--wood:#c89466;--gold:#ffd36b;--grass1:#3f8f4a;--grass2:#2f6f3a;--soil:#5a3f2c;--soil2:#45301f;--star:#ffffffcc;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.in{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--leaf);outline-offset:3px;border-radius:6px}
+.px{font-family:var(--f-px);letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+/* 상단 */
+.nav{position:absolute;inset:0 0 auto;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+.nav .in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:34px;height:34px}
+.brand b{font-family:var(--f-disp);font-weight:400;font-size:20px;line-height:1}
+.navr{display:flex;align-items:center;gap:6px}
+.navr a.lk{text-decoration:none;font-size:14px;color:var(--sub);padding:6px 10px;border-radius:999px}
+.navr a.lk:hover{color:var(--ink)}
+.lang{display:flex;background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--line);border-radius:999px;padding:3px;backdrop-filter:blur(6px)}
+.lang button{font:inherit;font-size:13px;border:0;background:none;color:var(--sub);padding:4px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--leaf);color:#0d2416}
+/* 히어로 */
+.hero{position:relative;overflow:hidden;background:linear-gradient(var(--sky1),var(--sky2) 78%);padding-top:calc(96px + env(safe-area-inset-top,0px))}
+.hero .copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding-bottom:12px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--leaf);background:color-mix(in srgb,var(--leaf) 14%,transparent);padding:5px 12px;border-radius:999px}
+.eyebrow i{width:8px;height:8px;background:var(--leaf);display:inline-block;animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+h1{font-family:var(--f-disp);font-weight:400;font-size:clamp(40px,8.4vw,92px);line-height:1.04;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .g{color:var(--leaf);position:relative;white-space:nowrap}
+.hero p.lead{margin:0;max-width:34em;color:var(--sub);font-size:clamp(16px,2.2vw,19px)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-family:var(--f-disp);font-size:17px;text-decoration:none;padding:12px 20px;border-radius:14px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);box-shadow:0 4px 0 var(--leaf);transition:transform .12s,box-shadow .12s;cursor:pointer}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--leaf)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--leaf)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink);box-shadow:none}
+.garden{position:relative;height:clamp(250px,34vw,380px);margin-top:-8px;cursor:pointer;touch-action:manipulation}
+.garden canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;display:block}
+.hud{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:18px;z-index:3;display:flex;align-items:center;gap:8px;background:#000000a0;color:#fff;padding:7px 12px;border-radius:12px;font-variant-numeric:tabular-nums;pointer-events:none}
+.hud svg{width:16px;height:16px}
+.hint{position:absolute;left:max(20px,env(safe-area-inset-left,0px));bottom:18px;z-index:3;color:#fff;background:#00000080;padding:6px 11px;border-radius:12px;font-size:13px;pointer-events:none}
+/* 섹션 공통 */
+section.s{padding-block:clamp(64px,10vw,120px)}
+.sh{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(28px,5vw,48px);max-width:640px}
+.sh .px{color:var(--leaf)}
+h2{font-family:var(--f-disp);font-weight:400;font-size:clamp(30px,5vw,52px);line-height:1.12;margin:0;text-wrap:balance}
+.sh p{margin:0;color:var(--sub);font-size:17px}
+/* 세 걸음 */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:st}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.step .num{font-family:var(--f-px);font-size:13px;color:var(--sub)}
+.step h3{font-family:var(--f-disp);font-weight:400;font-size:24px;margin:0}
+.step p{margin:0;color:var(--sub)}
+.step .vis{height:120px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;position:relative}
+.timer{font-family:var(--f-px);font-size:34px;color:var(--ink);font-variant-numeric:tabular-nums}
+.bar{position:absolute;left:16px;right:16px;bottom:18px;height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:40%;background:var(--leaf);animation:fill 6s linear infinite}
+@keyframes fill{from{width:0}to{width:100%}}
+.goals{display:flex;flex-direction:column;gap:8px;width:80%}
+.goals div{display:flex;align-items:center;gap:8px;font-size:14px}
+.goals b{width:12px;height:12px;border-radius:3px;flex:none}
+.goals span{flex:1;height:8px;border-radius:5px;background:var(--line);position:relative;overflow:hidden}
+.goals span::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:currentColor;border-radius:5px}
+.leaves{display:flex;gap:6px;align-items:flex-end}
+.leaves svg{width:46px;height:46px;animation:pop 2.4s ease-in-out infinite}
+.leaves svg:nth-child(2){animation-delay:.3s}.leaves svg:nth-child(3){animation-delay:.6s}.leaves svg:nth-child(4){animation-delay:.9s}
+@keyframes pop{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
+/* 친구들 */
+.pals{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pal{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 10px 14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .15s,border-color .15s}
+.pal:hover,.pal.on{transform:translateY(-4px);border-color:var(--leaf)}
+.pal .st{aspect-ratio:1;border-radius:12px;background:linear-gradient(var(--panel2),color-mix(in srgb,var(--wood) 40%,var(--panel2)));position:relative;overflow:hidden;max-width:100%}
+.pal canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.pal b{font-family:var(--f-disp);font-weight:400;font-size:19px;line-height:1.1}
+.pal small{color:var(--sub);font-size:13px;line-height:1.4}
+.pal .mv{font-family:var(--f-px);font-size:10.5px;color:var(--leaf)}
+/* 기능 */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.feat .ic{width:44px;height:44px;border-radius:12px;background:var(--panel2);display:grid;place-items:center}
+.feat .ic svg{width:26px;height:26px}
+.feat h3{font-family:var(--f-disp);font-weight:400;font-size:21px;margin:0}
+.feat p{margin:0;color:var(--sub);font-size:15px}
+/* 출시 */
+.launch{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;overflow:hidden;position:relative}
+.launch h2{font-size:clamp(28px,4.4vw,46px)}
+.launch p{color:var(--sub);margin:10px 0 22px}
+.stores{display:flex;flex-wrap:wrap;gap:10px}
+.store{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel2);min-width:0}
+.store svg{width:24px;height:24px;flex:none}
+.store b{display:block;font-size:15px;line-height:1.2}
+.store small{display:block;color:var(--sub);font-size:12px}
+.langs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.langs span{font-size:13px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--leaf) 14%,transparent);color:var(--leaf)}
+.launch .pet{justify-self:center;width:min(280px,100%);aspect-ratio:1;max-width:100%}
+.launch .pet canvas{width:100%;height:100%;image-rendering:pixelated}
+/* 회사 */
+.co{display:grid;grid-template-columns:1fr 1.3fr;gap:28px;align-items:start}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:12px 22px;margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+dt{color:var(--sub)}dd{margin:0;min-width:0;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));color:var(--sub);font-size:14px}
+footer .in{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer nav{display:flex;gap:16px;flex-wrap:wrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.pals{grid-template-columns:repeat(3,1fr)}.feats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){.steps,.feats{grid-template-columns:1fr}.launch,.co{grid-template-columns:1fr}.pals{grid-template-columns:repeat(2,1fr)}.navr a.lk{display:none}.hint{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+<link rel="icon" href="favicon.svg"></head><body><header class="nav"><div class="in">
+  <a class="brand" href="#top" aria-label="Ujjun Studio"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/></svg><b data-i="brand">유쭌 스튜디오</b></a>
+  <div class="navr"><a class="lk" href="#pals" data-i="nav1">친구들</a><a class="lk" href="#feats" data-i="nav2">기능</a><a class="lk" href="#launch" data-i="nav3">출시</a>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-set="ko" aria-pressed="true">KO</button><button type="button" data-set="en" aria-pressed="false">EN</button></div></div>
+</div></header>
+<main id="top">
+<section class="hero">
+  <div class="in copy">
+    <span class="eyebrow px"><i></i><span data-i="eb">Coming soon · Android &amp; iOS</span></span>
+    <h1><span data-i="h1a">매일 1%씩,</span><br><span data-i="h1b">같이</span> <span class="g" data-i="h1c">자라요</span></h1>
+    <p class="lead" data-i="lead">목표를 세우고 타이머로 집중하면, 집중한 시간만큼 잎이 쌓여요. 그 잎으로 작은 친구의 방을 꾸미고 마당을 가꿔요.</p>
+    <div class="cta"><a class="btn" id="ctaMail" href="mailto:bobblue2@naver.com?subject=Ujjun%20Timer%20launch%20alert"><span data-i="cta1">출시 알림 받기</span></a><a class="btn ghost" href="#pals" data-i="cta2">친구들 만나기</a></div>
+  </div>
+  <div class="garden" id="garden" role="img" aria-label="픽셀 정원에서 동물 친구들이 돌아다니는 장면"><canvas id="gc"></canvas>
+    <div class="hint" data-i="hint">친구를 눌러 보세요</div>
+    <div class="hud"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2"/></svg><span class="px" id="leafN">0</span></div></div>
+</section>
+
+<section class="s" id="how"><div class="in">
+  <div class="sh"><span class="px">How it works</span><h2 data-i="howT">집중한 시간이 눈에 보이게</h2><p data-i="howP">해야 할 일은 그대로인데, 매일 조금 더 하고 싶어지는 이유를 만들었어요.</p></div>
+  <div class="steps">
+    <article class="step"><div class="vis"><div class="goals"><div style="color:#ff8a4c"><b style="background:#ff8a4c"></b><span style="--w:72%"></span></div><div style="color:#3aa0ff"><b style="background:#3aa0ff"></b><span style="--w:48%"></span></div><div style="color:#d65fe0"><b style="background:#d65fe0"></b><span style="--w:30%"></span></div></div></div><span class="num">STEP 01</span><h3 data-i="s1t">목표 세우기</h3><p data-i="s1p">월간 · 주간 · 하루 목표를 정하면, 오늘 몇 시간 하면 되는지 알아서 나눠 줘요.</p></article>
+    <article class="step"><div class="vis"><span class="timer" id="tmr">24:59</span><div class="bar"><i></i></div></div><span class="num">STEP 02</span><h3 data-i="s2t">타이머로 집중</h3><p data-i="s2p">타이머를 켜면 캐릭터가 같이 달려요. 할 일도 목표별로 정리돼요.</p></article>
+    <article class="step"><div class="vis"><div class="leaves"><svg viewBox="0 0 48 48"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/></svg><svg viewBox="0 0 48 48"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/></svg><svg viewBox="0 0 48 48"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#ffd36b" stroke="#c98a1a" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#ffd36b" stroke="#c98a1a" stroke-width="2"/></svg><svg viewBox="0 0 48 48"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/></svg></div></div><span class="num">STEP 03</span><h3 data-i="s3t">잎 모아 꾸미기</h3><p data-i="s3p">출석과 집중으로 잎을 모아 가구를 사고, 방을 넓히고, 마당에 텃밭을 가꿔요.</p></article>
+  </div>
+</div></section>
+
+<section class="s" id="pals" style="padding-top:0"><div class="in">
+  <div class="sh"><span class="px">Friends</span><h2 data-i="palT">머리에 새싹이 난 친구들</h2><p data-i="palP">모두 직접 한 칸 한 칸 그린 픽셀 친구예요. 친구마다 자기만의 동작이 있어요. 카드에 손을 올리거나 눌러 보세요.</p></div>
+  <div class="pals" id="palGrid"></div>
+</div></section>
+
+<section class="s" id="feats" style="padding-top:0"><div class="in">
+  <div class="sh"><span class="px">Features</span><h2 data-i="ftT">타이머 앱인데, 집이 생겨요</h2></div>
+  <div class="feats" id="featGrid"></div>
+</div></section>
+
+<section class="s" id="launch" style="padding-top:0"><div class="in">
+  <div class="launch">
+    <div><span class="px" style="color:var(--leaf)">Launch</span><h2 data-i="lnT">곧 만나요</h2><p data-i="lnP">안드로이드와 iOS로 준비하고 있어요. 출시되면 가장 먼저 알려드릴게요.</p>
+      <div class="stores"><div class="store"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3.5v17l9-8.5z" fill="#34a853"/><path d="M13 12l3.2-3L5 2.6c-.4-.2-.8-.2-1 0z" fill="#4285f4"/><path d="M13 12l-9 8.5c.2.2.6.2 1 0l11.2-6.4z" fill="#ea4335"/><path d="M16.2 9L13 12l3.2 2.9 3.4-1.9c.8-.5.8-1.5 0-2z" fill="#fbbc04"/></svg><div><b>Google Play</b><small data-i="soon">준비 중</small></div></div>
+        <div class="store"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.8c-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.8zM14.1 5.8c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg><div><b>App Store</b><small data-i="soon">준비 중</small></div></div></div>
+      <div class="langs"><span>한국어</span><span>English</span><span>日本語</span></div>
+      <div class="cta" style="margin-top:22px"><a class="btn" href="mailto:bobblue2@naver.com?subject=Ujjun%20Timer%20launch%20alert" data-i="cta1">출시 알림 받기</a></div>
+    </div>
+    <div class="pet"><canvas id="bigPet" width="72" height="72"></canvas></div>
+  </div>
+</div></section>
+
+<section class="s" id="company" style="padding-top:0"><div class="in co">
+  <div class="sh" style="margin:0"><span class="px">Studio</span><h2 data-i="coT">작게, 오래, 정성껏</h2><p data-i="coP">유쭌 스튜디오는 매일의 작은 성장을 돕는 앱을 만드는 1인 스튜디오예요. 캐릭터 하나, 동작 하나도 직접 다듬어요.</p></div>
+  <dl><dt data-i="dName">상호</dt><dd data-i="vName">유쭌 스튜디오 (Ujjun Studio)</dd><dt data-i="dRep">대표</dt><dd>Jaejung Yu</dd><dt data-i="dMail">문의</dt><dd><a href="mailto:bobblue2@naver.com">bobblue2@naver.com</a></dd><dt data-i="dLoc">소재지</dt><dd data-i="vLoc">대한민국 경기도 성남시</dd><dt data-i="dApp">앱</dt><dd data-i="vApp">유쭌 타이머 — 유쭌과 성장하는 1%의 사람들</dd></dl>
+</div></section>
+</main>
+<footer><div class="in"><span>© 2026 Ujjun Studio</span><nav><a href="privacy.html" data-i="fPriv">개인정보처리방침</a><a href="mailto:bobblue2@naver.com">bobblue2@naver.com</a></nav></div></footer>
+<script>
+const rad=a=>a*Math.PI/180;
+const dirv=a=>[Math.sin(rad(a)),Math.cos(rad(a))];      // 0도 = 아래
+const upv=a=>[Math.sin(rad(a)),-Math.cos(rad(a))];      // 0도 = 위
+const lerp=(a,b,k)=>a+(b-a)*k;
+const easeIO=k=>k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+const POSES={
+  stand:t=>({hx:50,hy:78,torso:0,head:0,aU1:-12,aL1:-6,aU2:12,aL2:6,tU1:-6,tL1:-6,tU2:6,tL2:6,eyes:1,mouth:.35,sway:Math.sin(t*.003)}),
+  run:t=>{const p=t*.0175,s=Math.sin(p),c=Math.cos(p);
+    return {hx:50,hy:76.5-3*Math.abs(c),torso:14,head:-8,
+      aU1:-48*s,aL1:-48*s+80,aU2:48*s,aL2:48*s+80,
+      tU1:38*s,tL1:38*s-(15+70*Math.max(0,c)),tU2:-38*s,tL2:-38*s-(15+70*Math.max(0,-c)),
+      eyes:1,mouth:1,sway:Math.sin(t*.012)}},
+  walkB:t=>{const p=t*.0075,sn=Math.sin(p),l1=Math.max(0,sn),l2=Math.max(0,-sn);
+    return {hx:50,hy:78-1.6*Math.abs(sn),torso:3*sn,head:-2*sn,
+      aU1:-38+7*sn,aL1:-22+7*sn,aU2:38+7*sn,aL2:22+7*sn,
+      tU1:-9+5*l1,tL1:-9+5*l1,tU2:9-5*l2,tL2:9-5*l2,eyes:1,mouth:.3,sway:sn}},
+  sit:t=>({hx:46,hy:99,torso:-12,head:6,aU1:-40,aL1:-35,aU2:-28,aL2:-24,tU1:98,tL1:12,tU2:104,tL2:18,eyes:.45,mouth:.2,sway:Math.sin(t*.003)}),
+  lie:t=>({hx:63,hy:100.5+.7*Math.sin(t*.0021),torso:-90,head:62,aU1:114,aL1:120,aU2:122,aL2:128,tU1:88,tL1:91,tU2:95,tL2:97,eyes:0,mouth:0,sway:.4*Math.sin(t*.0021)}),
+  wave:t=>{const w=Math.sin(t*.012);return {hx:50,hy:78,torso:-3,head:4,aU1:-14,aL1:-8,aU2:105,aL2:135-35*w,tU1:-6,tL1:-6,tU2:6,tL2:6,eyes:1,mouth:.8,sway:Math.sin(t*.003)}},
+  jump:t=>{const j=Math.max(0,Math.sin(t*.006));return {hx:50,hy:78-14*j,torso:0,head:-3*j,aU1:-40-30*j,aL1:-30-40*j,aU2:40+30*j,aL2:30+40*j,tU1:-6-14*j,tL1:-6+30*j,tU2:6+14*j,tL2:6-30*j,eyes:1,mouth:.6+.4*j,sway:0}},
+  stretch:t=>{const k=Math.sin(t*.0018);return {hx:50,hy:76.5-1.5*k,torso:8*k,head:-6*k,aU1:-118,aL1:-128,aU2:118,aL2:128,tU1:-5,tL1:-5,tU2:5,tL2:5,eyes:.3,mouth:.9,sway:k}},
+  dance:t=>{const p=t*.008,sn=Math.sin(p),cs=Math.cos(p);return {hx:50+3*sn,hy:78-3*Math.abs(cs),torso:12*sn,head:-8*sn,aU1:-60+50*sn,aL1:-100+40*sn,aU2:60+50*sn,aL2:100+40*sn,tU1:-10+8*sn,tL1:-6+10*sn,tU2:10+8*sn,tL2:6+10*sn,eyes:1,mouth:1,sway:sn}},
+  meditate:t=>{const b=Math.sin(t*.0016);return {hx:50,hy:99+.6*b,torso:0,head:0,aU1:-28,aL1:-72,aU2:28,aL2:72,tU1:78,tL1:-72,tU2:-78,tL2:72,eyes:0,mouth:.15,sway:.3*b}},
+  think:t=>{const k=Math.sin(t*.0015);return {hx:50,hy:78,torso:-2,head:9+4*k,aU1:-16,aL1:-10,aU2:24,aL2:-158,tU1:-6,tL1:-6,tU2:6,tL2:6,eyes:.6,mouth:.1,sway:.4*k}},
+  clap:t=>{const c=Math.abs(Math.sin(t*.011));return {hx:50,hy:78-1.5*c,torso:0,head:-2,aU1:-38,aL1:-98+24*c,aU2:38,aL2:98-24*c,tU1:-6,tL1:-6,tU2:6,tL2:6,eyes:1,mouth:1,sway:0}},
+  fight:t=>{const k=Math.max(0,Math.sin(t*.007));return {hx:50,hy:78-2*k,torso:-4,head:-4,aU1:-48,aL1:24,aU2:-58-14*k,aL2:-172,tU1:-14,tL1:-12,tU2:14,tL2:12,eyes:1,mouth:1,sway:0}},
+  doze:t=>{const n=Math.max(0,Math.sin(t*.0022));return {hx:46,hy:99,torso:-8,head:8+22*n,aU1:-40,aL1:-35,aU2:-28,aL2:-24,tU1:98,tL1:12,tU2:104,tL2:18,eyes:0,mouth:.1,sway:0}},
+  squat:t=>{const k=(1-Math.cos(t*.004))/2;return {hx:50,hy:78+13*k,torso:0,head:0,aU1:-90+20*(1-k),aL1:-90+20*(1-k),aU2:90-20*(1-k),aL2:90-20*(1-k),tU1:-8-52*k,tL1:-8+38*k,tU2:8+52*k,tL2:8-38*k,eyes:1,mouth:.5,sway:0}},
+  yoga:t=>{const k=Math.sin(t*.0014);return {hx:50,hy:78,torso:2*k,head:0,aU1:-140,aL1:-162,aU2:140,aL2:162,tU1:-4,tL1:-4,tU2:72,tL2:-40,eyes:0,mouth:.3,sway:.5*k}},
+  cheerL:t=>{const j=Math.max(0,Math.sin(t*.0075)); // 가볍게 신나하기: 낮게 콩콩
+    return {hx:50,hy:78-5*j,torso:0,head:0,aU1:-112,aL1:-140,aU2:112,aL2:140,tU1:-7-3*j,tL1:-7+8*j,tU2:7+3*j,tL2:7-8*j,eyes:1,mouth:1,sway:Math.sin(t*.01)}},
+  cheer:t=>{const j=Math.max(0,Math.sin(t*.0075));
+    return {hx:50,hy:78-16*j,torso:0,head:0,aU1:-108,aL1:-150,aU2:108,aL2:150,tU1:-8-10*j,tL1:-8+25*j,tU2:8+10*j,tL2:8-25*j,eyes:1,mouth:1,sway:Math.sin(t*.01)}}
+};
+// 옷 입었을 때 쓰는 값: sw=어깨 폭(정면 1 · 옆모습 0), wd=달릴 때 옷자락이 뒤로 날리는 정도
+const POSE_X={run:{sw:0,wd:1},lie:{sw:0},sit:{sw:.15},doze:{sw:.15},fight:{sw:.35},walkB:{wd:.25}};
+Object.keys(POSES).forEach(n=>{const f=POSES[n],x=Object.assign({sw:1,wd:0},POSE_X[n]);POSES[n]=t=>Object.assign(f(t),x)});
+const RIG_KEYS=Object.keys(POSES.stand(0));
+var state={prefs:{}};function persist(){}function fToast(){}function drawRig(){}function lvBlock(){return ''}function idleMotion(){return 'stand'}function setIdleMotion(){}function openMotionSet(){}function updateSprout(){}function charModal(){}function rigPlay(){}function setZzz(){}function motionNeedTxt(){return ''}var stageRig=null,sproutMode='',MOTION_NEED={};function rigSVG(){return ''}function makeRig(){}
+/* v502 동물 캐릭터(픽셀) 시험: 병아리 한 마리. 새 키 state.prefs.pet ('' = 새싹이, 'chick' = 병아리). 기존 데이터는 그대로 */
+/* 동물 몸 그대로: 머리와 몸이 하나인 동그란 몸 + 작은 발 + 앞발/날개 + 귀/꼬리. 뼈대 동작값을 동물 움직임으로 바꿔 써요 */
+const PA_W=36,PA_H=36,PA_GY=34;
+const PA_AN={
+ chick:{n:'병아리',f:'#ffe27a',s:'#f2c444',o:'#9a6a14',ck:'#ffa6a6',ft:'#ff9a3c',e:'#2a1c10',rx:8.6,ry:8.2,paw:'wing',nose:'beak'},
+ mole:{n:'두더지',f:'#8b6b5a',s:'#6c5043',o:'#3a2620',ck:'#e89a9a',ft:'#f2a6b4',e:'#1a1010',rx:10,ry:7.4,paw:'claw',pc:'#f2a6b4',nose:'pink',eye:'line',bl:'#a88472',noHi:1},
+ bunny:{n:'토끼',f:'#ffffff',s:'#e4e0ea',o:'#5a4a5e',ck:'#ffadc0',ft:'#ffffff',e:'#2a2433',rx:8.6,ry:8,paw:'paw',ear:'long',inner:'#ffc2d1',tail:'cotton',nose:'pinkdot'},
+ cat:{n:'고양이',f:'#ffc98a',s:'#f2a65a',o:'#8a4a1a',ck:'#ff9aa8',ft:'#fff3e3',e:'#2a1a10',rx:9,ry:7.8,paw:'paw',pc:'#fff3e3',ear:'tri',inner:'#ffb0b0',tail:'long',nose:'cat',bl:'#fff3e3',stripe:'#e8904a',noHi:1},
+ bear:{n:'곰',f:'#c08a5a',s:'#9c6a40',o:'#4a2a14',ck:'#ff9a9a',ft:'#9c6a40',e:'#1a0e08',rx:9.2,ry:8.4,paw:'paw',ear:'round',inner:'#e8b88a',tail:'stub',nose:'bear',mz:'#f0d2b0',noHi:1},
+ hamster:{n:'햄스터',f:'#ffcf8f',s:'#f0a95a',o:'#8a5020',ck:'#ff9ab0',ft:'#ffb0c0',e:'#2a1a10',rx:9.6,ry:8,paw:'paw',pc:'#ffb0c0',ear:'small',inner:'#ffb0b0',nose:'pinkdot',mz:'#ffffff',bl:'#ffffff'},
+ penguin:{n:'펭귄',f:'#4a5a7a',s:'#384662',o:'#1a2236',ck:'#ff9ab0',ft:'#ff9a3c',e:'#10141f',rx:8,ry:9.6,paw:'fin',nose:'beak',face:'#ffffff',pg:1,noHi:1},
+ squirrel:{n:'다람쥐',f:'#d9905a',s:'#b8703e',o:'#5a2e14',ck:'#ff9a9a',ft:'#b8703e',e:'#1a0e08',rx:8.6,ry:8,paw:'paw',pc:'#fbe3c8',ear:'tuft',inner:'#f2b08a',tail:'big',tc:'#c07a48',nose:'bear',bl:'#fbe3c8',noHi:1},
+ fox:{n:'여우',f:'#f08a3c',s:'#d06a24',o:'#6a2a0a',ck:'#ff9a9a',ft:'#3a2a24',e:'#1a0e08',rx:8.8,ry:7.8,paw:'paw',pc:'#3a2a24',ear:'tri',inner:'#3a2a24',tail:'fox',tc:'#f08a3c',nose:'cat',mz:'#ffffff',noHi:1},
+ frog:{n:'개구리',f:'#8fd16a',s:'#6aae4a',o:'#2a5a1a',ck:'#ff9ab0',ft:'#8fd16a',e:'#1a2410',rx:10,ry:7.4,paw:'paw',ear:'frog',nose:'none',bl:'#e8f5c0',noHi:1}};
+function paDrawK(p,S,o,K){o=o||{};K=K||1;const pk=+p.pk||0;const GW=Math.round(PA_W*K),GH=Math.round(PA_H*K);const g=Array.from({length:GH},()=>Array(GW).fill(null)),OW=Math.max(1,Math.round(K*.75));
+  const rad=a=>a*Math.PI/180,dv=a=>[Math.sin(rad(a)),Math.cos(rad(a))];
+  const side=p.sw<.5,back=!!o.back||(+p.bk>.5),lie=Math.abs(p.torso)>60;
+  const crouch=Math.max(0,(p.hy-78)/20),air=Math.max(0,(78-p.hy)*.22);
+  let rx=S.rx*(side?1.08:1)*(1+crouch*.08),ry=S.ry*(1-crouch*.1);if(lie){rx*=1.22;ry*=.72}
+  const tilt=(lie?0:p.torso)*.012-pk*.22;
+  const c=[p.hx*.36,PA_GY-1.6-ry-air+pk*1.2];
+  const part=(fn,fill,line,shade)=>{const m=[];for(let y=0;y<GH;y++){m.push([]);for(let x=0;x<GW;x++)m[y].push(fn((x+.5)/K,(y+.5)/K))}
+    const at=(x,y)=>y>=0&&y<GH&&x>=0&&x<GW&&m[y][x];let area=0;for(const r of m)for(const v of r)if(v)area++;const ow=area<OW*OW*40?1:OW; // 작은 조각(손·발·작은 귀)은 테두리를 얇게
+    for(let y=0;y<GH;y++)for(let x=0;x<GW;x++)if(m[y][x]){let e=false;for(let d=1;d<=ow&&!e;d++)e=!at(x-d,y)||!at(x+d,y)||!at(x,y-d)||!at(x,y+d);g[y][x]=e?line:(shade&&shade((x+.5)/K,(y+.5)/K))||fill}};
+  const ell=(cx,cy,a,b,ang)=>{const ca=Math.cos(ang||0),sa=Math.sin(ang||0);return (x,y)=>{const X=(x-cx)*ca+(y-cy)*sa,Y=-(x-cx)*sa+(y-cy)*ca;return (X/a)**2+(Y/b)**2<1}};
+  const put=(x,y,col)=>{x=Math.round(x);y=Math.round(y);const x0=Math.round(x*K),y0=Math.round(y*K),x1=Math.round((x+1)*K),y1=Math.round((y+1)*K);for(let yy=y0;yy<y1;yy++)for(let xx=x0;xx<x1;xx++)if(yy>=0&&yy<GH&&xx>=0&&xx<GW)g[yy][xx]=col};
+  const body=(x,y)=>{const X=x-c[0]-(y-c[1])*tilt,Y=y-c[1];const k=Y>0?1:1-(S.top||0);return (X/rx)**2+(Y/(ry))**2<1};
+  const shade=(x,y)=>{const d=((x-c[0])*.45/rx+(y-c[1])*.9/ry);if(d>.55)return S.s;if(!S.noHi&&((x-c[0])/rx+.45)**2+((y-c[1])/ry+.5)**2<.025)return '#ffffff';return null};
+  const fx=side?2.6+pk*1.6:0; // 얼굴이 옆을 보면 앞으로
+  const top=[c[0]+(side?-.6:0)-ry*tilt,c[1]-ry+.6];
+  // 발 (뒷다리): 다리 각도로 걸음
+  const step=a=>Math.sin(rad(a))*3.2;
+  const feet=side?[[c[0]-2.6+step(p.tU2),.6],[c[0]+1.8+step(p.tU1),0]]:[[c[0]-3.6,0],[c[0]+3.6,0]];
+  const lift=(a,b)=>Math.max(0,Math.sin(rad(b-a))*2.2);
+  // 꼬리 (뒤)
+  const tdir=side?-1:1,tb=[c[0]+tdir*(rx-1),c[1]+ry*.35];
+  const tailP=()=>{if(S.tail==='big'){const t=[tb[0]+tdir*2.5+(+p.tw||0)*1.4,tb[1]-5];part((x,y)=>ell(t[0],t[1],3.6,6.4,tdir*.25)(x,y)||ell(t[0]+tdir*1.6,t[1]-6,2.8,2.6)(x,y),S.tc,S.o,(x,y)=>((x-t[0])*tdir*.5+(y-t[1])*.3>1.6)?S.s:null)}
+    if(S.tail==='fox'){const w=(+p.tw||0)*.45,a=tdir*-.6+w,t=[tb[0]+tdir*3.6,tb[1]-1.5-w*tdir*2];part(ell(t[0],t[1],5,2.6,a),S.tc,S.o);part(ell(t[0]+Math.cos(a)*3.6*tdir,t[1]+Math.sin(a)*3.6*tdir-.2,1.9,1.5,0),'#ffffff','#ffffff')}
+    if(S.tail==='long'){const tw=+p.tw||0,pts=[];for(let k=0;k<13;k++){const t=k/12;pts.push([tb[0]+tdir*(2+t*4.5)+tw*t*t*3,tb[1]-t*7+Math.sin(t*3)*1.2])}part((X,Y)=>pts.some(([x,y])=>Math.hypot(X-x,Y-y)<1.5),S.f,S.o)}
+    if(S.tail==='stub')part(ell(tb[0]+tdir*.8,tb[1]-.5,1.9,1.7),S.f,S.o)};
+  if(!back)tailP();
+  if(side){const [a,b]=feet[0];part(ell(a+1,PA_GY-1.2-air-lift(p.tU2,p.tL2),2.6,1.5),S.ft,S.o)}
+  // 귀 (몸 뒤)
+  const ear=(fn,inn)=>{part(fn(1),S.f,S.o);if(inn&&!back&&S.inner)part(fn(.5),S.inner,S.inner)};const eo=side?-1.2:0;
+  if(S.ear==='long')[-3.4,3.4].forEach(dx=>{const e=[top[0]+dx+eo+(side&&dx>0?-2.4:0),top[1]-4.6];ear(k=>ell(e[0],e[1]+(1-k)*1.5,2*k,5.4*k,dx*.04+(+p.et||0)*(dx<0?-.35:.35)),1)});
+  if(S.ear==='tri')[-1,1].forEach(sg=>{const bx=top[0]+sg*4.6+eo,by=top[1]+2.6;ear(k=>(x,y)=>{const t=(by-y)/(6.2*k);return t>0&&t<1&&Math.abs(x-bx-sg*.6*t)<(1-t)*3.2*k},1)});
+  if(S.ear==='round'||S.ear==='small'){const r=S.ear==='round'?2.7:2.1;[-1,1].forEach(sg=>{const e=[top[0]+sg*5.6+eo,top[1]+1.6];ear(k=>(x,y)=>Math.hypot(x-e[0],y-e[1])<r*(k<1?.55:1),1)})}
+  if(S.ear==='tuft')[-1,1].forEach(sg=>{const bx=top[0]+sg*4.4+eo,by=top[1]+2.2;ear(k=>(x,y)=>{const t=(by-y)/(5.4*k);return t>0&&t<1&&Math.abs(x-bx)<(1-t*t)*2.2*k},1)});
+  // 잎 두 개
+  const sw=(p.sway||0)*1.2,lc=[top[0],top[1]-3];
+  part((x,y)=>Math.abs(x-top[0])<.8&&y>lc[1]-.5&&y<top[1]+1.5,'#2e9e5b','#2e9e5b');
+  const leaf=(dx,ang)=>ell(lc[0]+dx,lc[1]-1+(dx>0?-.2:0),3.6,1.9,rad(ang));
+  part(leaf(-3.4+sw*.3,18+sw*6),'#7fe0a2','#2e9e5b');part(leaf(3.6+sw*.3,-22+sw*6),'#7fe0a2','#2e9e5b');
+  // 개구리 눈 혹
+  const fe=S.ear==='frog'?[-1,1].map(sg=>[top[0]+sg*4.6+(side?2:0),top[1]+1.2]):null;
+  if(fe)fe.forEach(e=>part((x,y)=>Math.hypot(x-e[0],y-e[1])<3.2,S.f,S.o,null));
+  // 몸
+  part(body,S.f,S.o,shade);
+  if(back&&S.tail==='cotton')part(ell(c[0],c[1]+ry*.45,2.6,2.3),'#ffffff',S.o);
+  if(back&&S.tail&&S.tail!=='cotton'){const t0=S.tail;tailP()}
+  if(S.stripe&&!lie)[[-1.4],[0],[1.4]].forEach(([d])=>{put(top[0]+d*1.6-.5,top[1]+1.2,S.stripe);put(top[0]+d*1.6-.5,top[1]+2.2,S.stripe)});
+  if(!back){
+    if(S.pg){const eY=c[1]-ry*.3+pk*1.4+1,bx=c[0]+fx*1.3;
+      // 펭귄: 눈 둘레 하트 모양 흰 얼굴 + 아래쪽 흰 배 (사이는 남색으로 갈라요)
+      const mask=side?((x,y)=>Math.hypot(x-bx-1.6,y-eY)<3.3||ell(bx+2.6,eY+2,2.6,1.8)(x,y)):((x,y)=>Math.hypot(x-bx+2.5,y-eY)<3.2||Math.hypot(x-bx-2.5,y-eY)<3.2||((y>eY&&y<eY+4.2)&&Math.abs(x-bx)<(eY+4.2-y)*1.25));
+      part((x,y)=>mask(x,y)&&body(x,y),S.face,S.face);
+      const bc=[c[0]+fx*(side?1.1:0),c[1]+ry*.43];part((x,y)=>ell(bc[0],bc[1],rx*(side?.48:.62),ry*.44)(x,y)&&body(x,y),S.face,S.face,(x,y)=>(y-bc[1])>ry*.22?'#dfe6f0':null)}
+    else if(S.face){const fc=[c[0]+fx*1.3,c[1]-ry*.12];part((x,y)=>ell(fc[0],fc[1],rx*(side?.55:.72),ry*.78)(x,y)&&body(x,y),S.face,S.face)}
+    if(S.bl)part((x,y)=>ell(c[0]+fx*.8,c[1]+ry*.42,rx*(side?.42:.55),ry*.42)(x,y)&&body(x,y)&&!(S.mz&&0),S.bl,S.bl);
+    if(S.mz){const m=[c[0]+fx*1.4,c[1]+ry*.08],ch=+p.ch||0;part((x,y)=>ell(m[0],m[1],side?2.6:3.4,2.2)(x,y)&&body(x,y),S.mz,S.mz);if(ch>0)(side?[1]:[-1,1]).forEach(sg=>{const q=[c[0]+fx*1.2+sg*(side?2.2:rx*.62),c[1]+ry*.12];part((x,y)=>Math.hypot(x-q[0],(y-q[1])*1.1)<1.2+ch*2.4,S.bl||S.mz,S.o,(x,y)=>Math.hypot(x-q[0]+.8*sg,y-q[1]+.8)<.7?'#ffffff':null)})}
+    if(+p.th>0){const tc=[c[0]+fx*1.3,c[1]+ry*.05+1.6];part(ell(tc[0],tc[1],2.4*p.th+.6,1.8*p.th+.4),'#f6ffd8',S.o)}}
+  if(!side&&!back&&S.tail==='cotton'){}
+  // 얼굴
+  if(!back){const ex=c[0]-.5+fx*1.3,ey=c[1]-ry*.3-(lie?-1:0)+pk*1.4,blink=p.eyes<.3||lie,d=side?0:3.2;
+    const eye=x=>{const yy=fe?top[1]+1:ey;if(K>1.2&&!(blink||S.eye==='line')){part((X,Y)=>((X-x-1)/1.05)**2+((Y-yy-1)/1.25)**2<1,S.e,S.e);part((X,Y)=>Math.hypot(X-x-.65,Y-yy-.55)<.42,'#ffffff','#ffffff');return}if(blink||S.eye==='line'){put(x,yy+1,S.e);put(x+1,yy+1,S.e)}else{put(x,yy,'#ffffff');put(x+1,yy,S.e);put(x,yy+1,S.e);put(x+1,yy+1,S.e)}};
+    if(side)eye(ex+2.2);else{eye(ex-d+(fe?-1.4:0));eye(ex+d+(fe?1.4:0))}
+    const cy=ey+2.4;if(side){put(ex+.6,cy,S.ck);put(ex-.4,cy,S.ck)}else{[ex-d-1.6,ex-d-.6,ex+d+1.6,ex+d+2.6].forEach(x=>put(x,cy,S.ck))}
+    const nx=side?ex+4.4:ex,ny=ey+2;
+    if(S.nose==='beak'){if(side){put(nx+1,ny,S.ft);put(nx+2,ny,S.ft);put(nx+1,ny+1,'#e07a20')}else if(p.mouth>.85){[-1,0,1,2].forEach(k=>put(nx+k,ny,S.ft));put(nx,ny+1,'#7a2a10');put(nx+1,ny+1,'#7a2a10');put(nx,ny+2,'#e07a20');put(nx+1,ny+2,'#e07a20')}else{[-1,0,1,2].forEach(k=>put(nx+k,ny,S.ft));put(nx,ny+1,'#e07a20');put(nx+1,ny+1,'#e07a20')}}
+    else if(S.nose==='pink'){put(nx,ny,S.ft);put(nx+1,ny,S.ft);put(nx,ny+1,'#d07a8a');put(nx+1,ny+1,'#d07a8a')}
+    else if(S.nose==='none'){put(nx-.6,ny+.6,S.e);put(nx+1.6,ny+.6,S.e);put(nx+.5,ny+1.4,S.e)}
+    else{const nc=S.nose==='pinkdot'?'#e07a90':S.e;put(nx,ny,nc);if(!side)put(nx+1,ny,nc);put(nx-.6+(side?0:0),ny+1,S.e);if(!side)put(nx+1.6,ny+1,S.e);
+      if(S.nose==='cat'&&!side)[[-6,0],[-6,1.2],[7,0],[7,1.2]].forEach(([dx,dy])=>{put(nx+dx,ny+dy,S.o);put(nx+dx+(dx<0?1:-1),ny+dy,S.o)})}}
+  // 앞발/날개
+  const sh=[[c[0]-rx*.82,c[1]+ry*.15],[c[0]+rx*.82,c[1]+ry*.15]];
+  const PR=+p.pr||2.2,pawAt=(s0,a)=>{const d=dv(a);return [s0[0]+d[0]*PR,s0[1]+d[1]*PR]};
+  const pc=S.pc||S.f;
+  const drawPaw=(s0,a,i)=>{const q=pawAt(s0,a);
+    if(S.paw==='wing'){const ang=rad(-a*.6)+(i?-.5:.5);part(ell(q[0],q[1]-.6,1.8,3,ang),S.f,S.o,()=>S.s)}
+    else if(S.paw==='fin'){part(ell(q[0],q[1],1.5,3.4,rad(-a*.5)),S.f,S.o)}
+    else if(S.paw==='claw'){part(ell(q[0],q[1],2.4,1.9),pc,S.o);put(q[0]-1,q[1]+1.6,'#ffffff');put(q[0]+.5,q[1]+1.6,'#ffffff')}
+    else part(ell(q[0],q[1],1.8,1.7),pc,S.o)};
+  if(side){drawPaw([c[0]+1.5,c[1]+ry*.25],p.aU1*.5,1)}else if(!lie&&p.wash!=null){const ph=+p.wash,eY=c[1]-ry*.3,act=ph<.5?-1:1,k=Math.sin((ph%.5)/.5*Math.PI);[-1,1].forEach(sg=>{const on=sg===act,q=on?[c[0]+sg*(4.6-2*k),eY+3.6-3.4*k]:[c[0]+sg*(rx*.8),c[1]+ry*.35];part(ell(q[0],q[1],2.2,1.9,on?sg*-.5:0),pc,S.o)})}
+  else if(!lie){drawPaw(sh[0],p.aU1,0);drawPaw(sh[1],p.aU2,1)}
+  // 앞쪽 발
+  if(side){const [a]=feet[1];part(ell(a+1,PA_GY-1.2-air-lift(p.tU1,p.tL1),2.6,1.5),S.ft,S.o)}
+  else if(!lie)feet.forEach(([a],i)=>part(ell(a,PA_GY-1.3-air,2.5,1.5),S.ft,S.o));
+  if(+p.dirt>0){const T=performance.now()/1000;for(let n=0;n<5;n++){const ph=(T*1.8+n/5)%1,dx=c[0]-rx-1-ph*6-n%2,dy=PA_GY-2-Math.sin(ph*Math.PI)*6-n%3;put(dx,dy,n%2?'#8a6a48':'#6a4e34')}}
+  // v509 자는 중엔 머리 위로 Z가 둥실둥실
+  if(+p.zz>.5){const T=performance.now()/1000;[0,1,2].forEach(n=>{const ph=(T*.22+n/3)%1,sz=n===2?4:3,zx=c[0]+5+ph*4+n*.4,zy=top[1]-2-ph*9;if(ph>.92)return;
+    for(let i=0;i<sz;i++){put(zx+i,zy,'#e8f0ff');put(zx+i,zy+sz-1,'#e8f0ff');put(zx+sz-1-i,zy+i,'#e8f0ff')}})}
+  // v509 반대쪽을 볼 땐 좌우로 뒤집어요 (빙글빙글 · 두리번)
+  if(+p.fl>.5){const cx=Math.round(c[0]*K*2);for(const row of g){const cp=row.slice();for(let x=0;x<row.length;x++){const sx=cx-1-x;row[x]=sx>=0&&sx<row.length?cp[sx]:null}}}
+  return g}
+
+function paRectsK(g){let r='';for(let y=0;y<g.length;y++){let x=0;const W=g[0].length;while(x<W){const c=g[y][x];if(!c){x++;continue}let e=x+1;while(e<W&&g[y][e]===c)e++;r+=`<rect x="${x}" y="${y}" width="${e-x}" height="1" fill="${c}"/>`;x=e}}return r}
+
+var PET_K=2,PET_BIG=1; // v507 해상도 2배 · v508 크기는 원래대로
+function paDraw(p,S,o){return paDrawK(p,S,o,PET_K)}
+function paRects(g){let r='';const W=g[0].length;for(let y=0;y<g.length;y++){let x=0;while(x<W){const c=g[y][x];if(!c){x++;continue}let e=x+1;while(e<W&&g[y][e]===c)e++;r+=`<rect x="${x}" y="${y}" width="${e-x}" height="1" fill="${c}"/>`;x=e}}return r}
+const PET_LIST=[['','새싹이'],['chick','병아리'],['penguin','펭귄']];
+function petJ(w,a,b){const c=w.charCodeAt(w.length-1)-0xAC00;return w+(c>=0&&c<11172&&c%28?a:b)}
+function petKey(){const k=state&&state.prefs&&state.prefs.pet;return k&&PA_AN[k]?k:''}
+function petSet(k){state.prefs=state.prefs||{};state.prefs.pet=k;persist();document.querySelectorAll('.petPick button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));fToast(k?`${petJ(PA_AN[k].n,'으로','로')} 바꿨어요`:'새싹이로 돌아왔어요')}
+(function(){const st=document.createElement('style');st.textContent='svg.pxOn .rgLimbs,svg.pxOn .rgAcc,svg.pxOn .rgSh,svg.pxOn .rgWp,svg.pxOn .rgF1,svg.pxOn .rgF2{display:none}.petPick{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}.petPick b{font-size:12px;color:#9aa3c7;margin-right:4px}.petPick button{padding:5px 12px;border-radius:999px;background:#ffffff0d;border:1px solid #ffffff1f;color:#ccc;font-weight:800;font-size:12px}.petPick button.on{background:#2b6b4555;border-color:#47c477;color:#bff5d0}';document.head.appendChild(st)})();
+// 그리기: 뼈대가 움직일 때마다 같은 동작값으로 픽셀 동물을 다시 찍어요
+const PET_SC=3;
+function petDraw(r){const k=petKey(),sv=r.svg;let G=r.pxG;
+  if(!k){if(r.pxOn){sv.classList.remove('pxOn');if(G)G.innerHTML='';r.pxOn=0;r.pxS=''}return}
+  if(!G||!G.isConnected){G=document.createElementNS('http://www.w3.org/2000/svg','g');G.setAttribute('class','pxPet');G.setAttribute('shape-rendering','crispEdges');const z=sv.querySelector('.z');sv.insertBefore(G,z||null);r.pxG=G}
+  if(!r.pxOn){sv.classList.add('pxOn');r.pxOn=1}
+  const p=r.cur;if(!p)return;const back=sv.classList.contains('backView'),nw=performance.now();if(r.pxT&&nw-r.pxT<50&&r.pxB===back)return;r.pxT=nw;r.pxB=back; // 1초에 20번만 다시 그려요 (픽셀 느낌 + 폰 부담 줄이기)
+  const s=paRects(paDraw(p,PA_AN[k],{back}));if(s!==r.pxS){G.innerHTML=s;r.pxS=s}
+  const sc=PET_SC*PET_BIG;G.setAttribute('transform',`translate(${(p.hx-p.hx*.36*sc).toFixed(2)} ${(112-PA_GY*sc).toFixed(2)}) scale(${(sc/PET_K).toFixed(4)})`)}
+(function(){const _dr=drawRig;drawRig=function(r,now){_dr(r,now);try{petDraw(r)}catch(e){}}})();
+// 병아리 동작: 모이 쪼기 · 날갯짓 · 총총 뛰기 (POSES는 나중에 읽어요)
+setTimeout(()=>{try{if(Array.isArray(RIG_KEYS)&&!RIG_KEYS.includes('pk'))RIG_KEYS.push('pk');
+  const base=t=>Object.assign({},POSES.stand(t),{pk:0});
+  POSES.pkPeck=t=>{const ph=(t%1100)/1100,k=ph<.22?Math.sin(ph/.22*Math.PI):ph>.3&&ph<.52?Math.sin((ph-.3)/.22*Math.PI):0;return Object.assign(base(t),{sw:.15,pk:k,eyes:k>.5?.1:1})};
+  POSES.pkFlap=t=>{const o=(Math.sin(t/1000*20)+1)/2;return Object.assign(base(t),{aU1:-30-110*o,aL1:-30-110*o,aU2:30+110*o,aL2:30+110*o,hy:78-5*Math.abs(Math.sin(t/1000*5)),mouth:1})};
+  POSES.pkHop=t=>{const h=Math.abs(Math.sin(t/1000*Math.PI*2.4));return Object.assign(base(t),{hy:78-11*h,aU1:-40*h,aU2:40*h,mouth:.9})};
+  POSES.pkSpin=t=>{const ph=(t%1200)/1200,q=Math.floor(ph*4);return Object.assign(base(t),{sw:q===0||q===2?1:.15,bk:q===2?1:0,fl:q===3?1:0,hy:78-5*Math.abs(Math.sin(ph*Math.PI*2)),aU1:-35,aU2:35,mouth:.9})};
+  RIG_KEYS.forEach(k=>{});
+}catch(e){}},0);
+// 그냥 있을 때 가끔 병아리다운 행동을 해요 (서 있을 때만, 걷거나 타이머 중엔 안 해요)
+const PET_ACTS=[['pkPeck',2200],['pkFlap',1500],['pkHop',1700],['pkSpin',1600]];
+setInterval(()=>{try{if(!petKey()||!stageRig||document.hidden)return;if((typeof WALK!=='undefined'&&WALK.busy)||(state.timers||[]).some(t=>t.running))return;
+  const cur=stageRig.pose;if(!['stand','wave','pkNest','pkLook','pgStand','anSit'].includes(cur))return;if(Math.random()<.35)return;const AL=(typeof PET_ACTS_BY==='object'&&PET_ACTS_BY[petKey()])||PET_ACTS,a=AL[Math.floor(Math.random()*AL.length)];
+  rigPlay(stageRig,[[a[0],250,a[1]],[cur,300]],()=>{stageRig.pose=cur})}catch(e){}},6500);
+// 캐릭터를 누르면 바로 한 가지 행동 (방에서는 메뉴 대신)
+function petPoke(){if(!petKey()||!stageRig)return;const cur=['stand','wave'].includes(stageRig.pose)?stageRig.pose:'stand',a=PET_ACTS[Math.floor(Math.random()*PET_ACTS.length)];rigPlay(stageRig,[[a[0],200,a[1]],[cur,300]],()=>{stageRig.pose=cur})}
+// 고르는 곳: 내 정보
+(function(){const _lb=lvBlock;lvBlock=function(){const k=petKey();return _lb.apply(this,arguments)+`<div class="petPick"><b>캐릭터 (시험)</b>${PET_LIST.map(([v,n])=>`<button type="button" data-k="${v}" class="${v===k?'on':''}" onclick="petSet('${v}')">${n}</button>`).join('')}</div>`}})();
+/* v506 캐릭터가 바뀌면 모션도 그 캐릭터 것으로. 병아리 모션 목록을 따로 두고, 고른 것은 새 키 state.prefs.petMotion[캐릭터] 에 저장해요 (새싹이 모션 설정은 그대로) */
+const PET_MOTIONS={chick:[['pkNest','둥지 앉기'],['pkSleep','쿨쿨 자기'],['pkDoze','꾸벅꾸벅'],['pkPeck','모이 쪼기'],['pkFlap','날갯짓'],['pkHop','총총 뛰기'],['pkSpin','빙글빙글'],['pkWiggle','궁둥이 춤'],['pkChirp','삐약 노래'],['pkPreen','깃털 다듬기'],['pkLook','두리번']]};
+const PET_DEF={chick:'pkNest'};
+setTimeout(()=>{try{
+  const base=t=>Object.assign({},POSES.stand(t),{pk:0}),blink=t=>(t%3200)<130?0:1,S=Math.sin;
+  POSES.pkNest=t=>Object.assign(base(t),{hy:90+1.2*S(t/700),eyes:blink(t),aU1:-8,aU2:8,mouth:.4});
+  POSES.pkSleep=t=>Object.assign(base(t),{zz:1,hy:96+1.6*S(t/1100),eyes:0,aU1:-4,aU2:4,mouth:.2,sway:.4*S(t/1100)});
+  POSES.pkDoze=t=>{const ph=(t%2600)/2600,n=ph>.55&&ph<.8?S((ph-.55)/.25*Math.PI):0;return Object.assign(base(t),{hy:88+n*3,pk:n*.9,eyes:.25,mouth:.2})};
+  POSES.pkWiggle=t=>{const w=S(t/1000*9);return Object.assign(base(t),{torso:w*14,hy:78-2*Math.abs(w),aU1:-50-30*w,aU2:50-30*w,mouth:1,eyes:blink(t)})};
+  POSES.pkChirp=t=>{const ph=(t%1400)/1400,o=ph<.12||(ph>.22&&ph<.34);return Object.assign(base(t),{mouth:o?1:.4,hy:78-(o?3:0),aU1:o?-60:-10,aU2:o?60:10,eyes:o?.2:blink(t)})};
+  POSES.pkPreen=t=>{const ph=(t%2000)/2000,k=ph<.6?.5+.3*S(ph*30):0;return Object.assign(base(t),{sw:.15,pk:k,aU1:ph<.6?-70:-10,eyes:ph<.6?.1:1})};
+  POSES.pkLook=t=>{const ph=(t%3600)/3600,q=ph<.25?0:ph<.45?1:ph<.7?0:2;return Object.assign(base(t),{sw:q?.15:1,fl:q===2?1:0,eyes:blink(t)})};
+  if(typeof MOTION_NEED==='object')MOTION_NEED.pkSleep=['bed','sofa'];
+}catch(e){}},0);
+function petMotionList(){const k=petKey();return k&&PET_MOTIONS[k]?PET_MOTIONS[k]:null}
+// 쉬는 동작: 캐릭터가 동물이면 그 동물 모션 중에서
+(function(){const _im=idleMotion;idleMotion=function(){const L=petMotionList();if(!L)return _im();const k=petKey(),m=(state.prefs&&state.prefs.petMotion||{})[k],v=L.some(x=>x[0]===m)?m:PET_DEF[k];return (typeof motionOk==='function'&&!motionOk(v))?PET_DEF[k]:v}})();
+(function(){const _sm=setIdleMotion;setIdleMotion=function(v){const L=petMotionList();if(!L)return _sm(v);state.prefs.petMotion=state.prefs.petMotion||{};state.prefs.petMotion[petKey()]=v;persist();document.querySelectorAll('#charModal .mtBtn').forEach(b=>b.classList.toggle('on',b.querySelector('.mtFig').dataset.pose===v));sproutMode='';updateSprout()}})();
+(function(){const _om=openMotionSet;openMotionSet=function(){const L=petMotionList();if(!L)return _om();const cur=idleMotion(),nm=PA_AN[petKey()].n;
+  charModal('모션',`<div class="hint" style="margin:0 0 10px">${petJ(nm,'이','가')} 쉬고 있을 때 할 동작을 골라요. 타이머가 돌 때는 달려요. 잠긴 모션은 가구를 놓으면 열려요.</div><div class="mtGrid">${L.map(([k,n])=>{const ok=typeof motionOk!=='function'||motionOk(k);return `<button type="button" class="mtBtn${k===cur?' on':''}${ok?'':' mtLock'}" onclick="${ok?`setIdleMotion('${k}')`:`motionNeed('${k}')`}"><span class="mtFig sproutFig" data-pose="${k}">${rigSVG()}</span><b>${n}</b>${ok?'':`<small class="mtNeed">${motionNeedTxt(k)}</small>`}</button>`}).join('')}</div>`);
+  document.querySelectorAll('#charModal .mtFig').forEach(e=>{const sv=e.querySelector('svg');if(sv)makeRig(sv,e.dataset.pose)})}})();
+// 쿨쿨 자기는 z가 떠요
+(function(){const _us=updateSprout;updateSprout=function(){_us.apply(this,arguments);try{if(petKey()&&sproutMode==='pkSleep')setZzz(false)}catch(e){}}})();
+// 캐릭터를 바꾸면 바로 그 캐릭터 모션으로
+(function(){const _ps=petSet;petSet=function(k){_ps(k);try{sproutMode='';updateSprout()}catch(e){}}})();
+
+/* v510 펭귄 추가. 모션은 펭귄 것으로 (배 미끄럼은 넣지 않음) */
+PET_MOTIONS.penguin=[['pgStand','가만히 서기'],['pkSleep','쿨쿨 자기'],['pkDoze','꾸벅꾸벅'],['pgWaddle','뒤뚱뒤뚱'],['pkFlap','파닥파닥'],['pkHop','총총 뛰기'],['pkSpin','빙글빙글'],['pgClap','박수치기'],['pkChirp','노래하기'],['pkPreen','깃털 다듬기'],['pkLook','두리번']];
+PET_DEF.penguin='pgStand';
+var PET_ACTS_BY={penguin:[['pgWaddle',2000],['pkFlap',1500],['pkSpin',1600],['pgClap',1600],['pkHop',1500]]};
+setTimeout(()=>{try{const base=t=>Object.assign({},POSES.stand(t),{pk:0}),blink=t=>(t%3400)<130?0:1,S=Math.sin;
+  POSES.pgStand=t=>Object.assign(base(t),{eyes:blink(t),aU1:-12,aU2:12,hy:78+.8*S(t/800),mouth:.4});
+  POSES.pgWaddle=t=>{const w=S(t/1000*7);return Object.assign(base(t),{torso:w*12,aU1:-35+20*w,aU2:35+20*w,tU1:-6+6*w,tU2:6+6*w,mouth:.4,eyes:blink(t)})};
+  POSES.pgClap=t=>{const o=(S(t/1000*16)+1)/2;return Object.assign(base(t),{aU1:-20-50*o,aU2:20+50*o,hy:78-2*o,mouth:1,eyes:o>.5?.2:1})};
+}catch(e){}},0);
+
+/* v511 동물 8종 더: 두더지·토끼·고양이·곰·햄스터·다람쥐·여우·개구리. 기본 모션 + 동물마다 전용 모션 */
+PET_LIST.push(['mole','두더지'],['bunny','토끼'],['cat','고양이'],['bear','곰'],['hamster','햄스터'],['squirrel','다람쥐'],['fox','여우'],['frog','개구리']);
+(function(){const G=[['anSit','가만히 앉기'],['pkSleep','쿨쿨 자기'],['pkDoze','꾸벅꾸벅'],['pkHop','총총 뛰기'],['pkSpin','빙글빙글'],['pkLook','두리번'],['wave','손 흔들기'],['pkWiggle','궁둥이 춤']];
+  const SP={mole:[['anDig','땅 파기'],['anWash','세수하기']],bunny:[['anBigHop','깡충깡충'],['anEar','귀 쫑긋'],['anWash','세수하기']],cat:[['anTail','꼬리 흔들기'],['anWash','세수하기'],['anStretch','기지개']],
+    bear:[['anStretch','기지개'],['pgClap','박수치기']],hamster:[['anPuff','볼 빵빵'],['anWash','세수하기']],squirrel:[['anTail','꼬리 흔들기'],['anWash','세수하기']],fox:[['anTail','꼬리 흔들기'],['anStretch','기지개']],frog:[['anCroak','개굴개굴'],['anBigHop','폴짝폴짝']]};
+  Object.keys(SP).forEach(k=>{PET_MOTIONS[k]=[G[0]].concat(SP[k],G.slice(1));PET_DEF[k]='anSit';PET_ACTS_BY[k]=SP[k].map(x=>[x[0],1800]).concat([['pkHop',1500],['pkSpin',1600]])})})();
+setTimeout(()=>{try{const base=t=>Object.assign({},POSES.stand(t),{pk:0}),blink=t=>(t%3400)<130?0:1,S=Math.sin;
+  POSES.anSit=t=>Object.assign(base(t),{hy:86+1*S(t/800),eyes:blink(t),aU1:-6,aU2:6,mouth:.4});
+  POSES.anDig=t=>{const o=S(t/1000*22);return Object.assign(base(t),{sw:.15,pk:.7,hy:86,aU1:20+60*o,dirt:1,eyes:.2})};
+  POSES.anWash=t=>Object.assign(base(t),{wash:(t%1400)/1400,hy:84+.6*S(t/1000*9),eyes:.1,mouth:.3});
+  POSES.anBigHop=t=>{const ph=(t%900)/900,h=ph<.6?S(ph/.6*Math.PI):0;return Object.assign(base(t),{hy:ph<.6?78-18*h:84,aU1:-40*h,aU2:40*h,mouth:.9,eyes:blink(t)})};
+  POSES.anEar=t=>{const ph=(t%1400)/1400,e=ph<.15?S(ph/.15*Math.PI):ph>.3&&ph<.45?-S((ph-.3)/.15*Math.PI):0;return Object.assign(base(t),{et:e,hy:84,eyes:blink(t),mouth:.4})};
+  POSES.anTail=t=>Object.assign(base(t),{tw:S(t/1000*7)*1.2,hy:84,eyes:blink(t),mouth:.5});
+  POSES.anStretch=t=>{const ph=(t%2600)/2600,k=ph<.5?S(ph/.5*Math.PI):0;return Object.assign(base(t),{sw:.15,pk:k*.9,hy:84+k*6,aU1:-40*k,eyes:k>.3?0:1,mouth:k>.3?1:.4})};
+  POSES.anPuff=t=>{const ph=(t%2000)/2000,c=ph<.6?Math.min(1,ph/.15):Math.max(0,1-(ph-.6)/.1);return Object.assign(base(t),{ch:c,hy:84,eyes:c>.5?.2:1,mouth:.2})};
+  POSES.anCroak=t=>{const ph=(t%1000)/1000,o=ph<.35?S(ph/.35*Math.PI):0;return Object.assign(base(t),{th:o,mouth:o>.5?1:.4,hy:84-o*2,eyes:blink(t)})};
+}catch(e){}},0);
+(function(){const st=document.createElement('style');st.textContent='.petPick{row-gap:6px}';document.head.appendChild(st)})();
+
+</script>
+<script>
+(function(){
+const T={ko:{brand:'유쭌 스튜디오',nav1:'친구들',nav2:'기능',nav3:'출시',eb:'곧 출시 · Android & iOS',h1a:'매일 1%씩,',h1b:'같이',h1c:'자라요',
+ lead:'목표를 세우고 타이머로 집중하면, 집중한 시간만큼 잎이 쌓여요. 그 잎으로 작은 친구의 방을 꾸미고 마당을 가꿔요.',cta1:'출시 알림 받기',cta2:'친구들 만나기',hint:'친구를 눌러 보세요',
+ howT:'집중한 시간이 눈에 보이게',howP:'해야 할 일은 그대로인데, 매일 조금 더 하고 싶어지는 이유를 만들었어요.',s1t:'목표 세우기',s1p:'월간 · 주간 · 하루 목표를 정하면, 오늘 몇 시간 하면 되는지 알아서 나눠 줘요.',
+ s2t:'타이머로 집중',s2p:'타이머를 켜면 캐릭터가 같이 달려요. 할 일도 목표별로 정리돼요.',s3t:'잎 모아 꾸미기',s3p:'출석과 집중으로 잎을 모아 가구를 사고, 방을 넓히고, 마당에 텃밭을 가꿔요.',
+ palT:'머리에 새싹이 난 친구들',palP:'모두 한 칸 한 칸 그린 픽셀 친구예요. 친구마다 자기만의 동작이 있어요. 카드에 손을 올리거나 눌러 보세요.',ftT:'타이머 앱인데, 집이 생겨요',
+ lnT:'곧 만나요',lnP:'안드로이드와 iOS로 준비하고 있어요. 출시되면 가장 먼저 알려드릴게요.',soon:'준비 중',coT:'작게, 오래, 정성껏',coP:'유쭌 스튜디오는 매일의 작은 성장을 돕는 앱을 만드는 1인 스튜디오예요. 캐릭터 하나, 동작 하나도 직접 다듬어요.',
+ dName:'상호',vName:'유쭌 스튜디오 (Ujjun Studio)',dRep:'대표',dMail:'문의',dLoc:'소재지',vLoc:'대한민국 경기도 성남시',dApp:'앱',vApp:'유쭌 타이머 — 유쭌과 성장하는 1%의 사람들',fPriv:'개인정보처리방침',aria:'픽셀 정원에서 동물 친구들이 돌아다니는 장면'},
+en:{brand:'Ujjun Studio',nav1:'Friends',nav2:'Features',nav3:'Launch',eb:'Coming soon · Android & iOS',h1a:'Grow 1% more,',h1b:'every',h1c:'day',
+ lead:'Set a goal, focus with the timer, and every minute turns into leaves. Spend them on a cozy room and a little garden for your pixel friend.',cta1:'Get launch alert',cta2:'Meet the friends',hint:'Tap a friend',
+ howT:'See your focus grow',howP:'Your to-do list stays the same. You just get a reason to do a little more each day.',s1t:'Set goals',s1p:'Pick monthly, weekly and daily goals. The app splits out how many hours to do today.',
+ s2t:'Focus with a timer',s2p:'Start a timer and your character runs along. To-dos stay sorted by goal.',s3t:'Earn leaves, decorate',s3p:'Check in and focus to earn leaves. Buy furniture, grow your room, and tend a garden.',
+ palT:'Friends with sprouts on their heads',palP:'Every friend is hand-placed pixel by pixel, each with moves of its own. Hover or tap a card.',ftT:'A timer app that grows a home',
+ lnT:'See you soon',lnP:'Coming to Android and iOS. Leave your email and you will hear first.',soon:'Coming soon',coT:'Small, steady, made with care',coP:'Ujjun Studio is a one-person studio making apps for small daily growth. Every character and every move is tuned by hand.',
+ dName:'Name',vName:'Ujjun Studio',dRep:'Representative',dMail:'Contact',dLoc:'Location',vLoc:'Seongnam-si, Gyeonggi-do, Republic of Korea',dApp:'App',vApp:'Ujjun Timer — GROW 1% MORE',fPriv:'Privacy Policy',aria:'Pixel animal friends wandering around a little garden'}};
+const PALS=[['chick',{ko:'병아리',en:'Chick'},{ko:'모이 쪼기 장인',en:'Pro pecker'},'pkPeck'],['penguin',{ko:'펭귄',en:'Penguin'},{ko:'뒤뚱뒤뚱 산책러',en:'Waddle walker'},'pgWaddle'],
+ ['bunny',{ko:'토끼',en:'Bunny'},{ko:'깡충깡충 높이뛰기',en:'High hopper'},'anBigHop'],['cat',{ko:'고양이',en:'Cat'},{ko:'세수는 하루 세 번',en:'Washes thrice a day'},'anWash'],
+ ['bear',{ko:'곰',en:'Bear'},{ko:'기지개 펴는 중',en:'Big stretcher'},'anStretch'],['hamster',{ko:'햄스터',en:'Hamster'},{ko:'볼에 간식 저장',en:'Snack-cheek saver'},'anPuff'],
+ ['mole',{ko:'두더지',en:'Mole'},{ko:'땅 파기 담당',en:'Head digger'},'anDig'],['squirrel',{ko:'다람쥐',en:'Squirrel'},{ko:'꼬리가 자랑',en:'Proud of its tail'},'anTail'],
+ ['fox',{ko:'여우',en:'Fox'},{ko:'꼬리 살랑살랑',en:'Tail swisher'},'anTail'],['frog',{ko:'개구리',en:'Frog'},{ko:'개굴개굴 가수',en:'Croak singer'},'anCroak']];
+const IC={
+ goal:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#ff8a4c" stroke-width="2.4"/><circle cx="12" cy="12" r="4.5" fill="none" stroke="#ff8a4c" stroke-width="2.4"/><circle cx="12" cy="12" r="1.6" fill="#ff8a4c"/></svg>',
+ cal:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="#3aa0ff" stroke-width="2.2"/><path d="M3 10h18M8 3v4M16 3v4" stroke="#3aa0ff" stroke-width="2.2" stroke-linecap="round"/><path d="M8 15l2.5 2.5L16 12" stroke="#2e9e5b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+ home:'<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7" fill="none" stroke="#d9534a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v10h12V10" fill="none" stroke="#a8754a" stroke-width="2.2"/><rect x="10" y="14" width="4" height="6" fill="#a8754a"/></svg>',
+ farm:'<svg viewBox="0 0 24 24"><path d="M3 19h18" stroke="#a8754a" stroke-width="2.4" stroke-linecap="round"/><path d="M8 19v-6M16 19v-8" stroke="#2e9e5b" stroke-width="2.2"/><path d="M8 13c-3 0-4-2-4-3 2 0 4 1 4 3zM16 11c3 0 4-2 4-3-2 0-4 1-4 3z" fill="#7fe0a2"/><circle cx="12" cy="7" r="2.4" fill="#e85a5a"/></svg>',
+ move:'<svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="12" rx="6" fill="#ffe27a" stroke="#9a6a14" stroke-width="1.8"/><circle cx="9.5" cy="14" r="1.2" fill="#2a1c10"/><circle cx="14.5" cy="14" r="1.2" fill="#2a1c10"/><path d="M12 9V6M12 6c-2-3-5-2-6-1M12 6c2-3 5-2 6-1" stroke="#2e9e5b" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>',
+ safe:'<svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z" fill="none" stroke="#2e9e5b" stroke-width="2.2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#2e9e5b" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'};
+const FEATS=[['goal',{ko:'목표 · 타이머 · 할 일',en:'Goals, timers, to-dos'},{ko:'여러 목표를 동시에 재고, 목표별로 할 일을 정리해요.',en:'Run timers for several goals and keep to-dos sorted by goal.'}],
+ ['cal',{ko:'출석과 연속 기록',en:'Check-ins & streaks'},{ko:'매일 들르면 잎이 쌓이고, 연속으로 오면 보너스가 있어요.',en:'Drop by daily for leaves, with bonuses for streaks.'}],
+ ['home',{ko:'방과 마당 꾸미기',en:'Room & yard'},{ko:'가구를 놓고 돌리고, 방을 넓히고, 2층도 올려요.',en:'Place and rotate furniture, expand your room, even add a second floor.'}],
+ ['farm',{ko:'텃밭과 낚시',en:'Garden & fishing'},{ko:'씨앗을 심어 수확하고, 연못에서 물고기를 모아요.',en:'Plant and harvest seeds, and collect fish from the pond.'}],
+ ['move',{ko:'살아 있는 캐릭터',en:'A character that lives'},{ko:'눕고, 앉고, 졸고, 춤추고. 놓은 가구에 따라 할 수 있는 동작이 늘어나요.',en:'It naps, sits, dozes and dances. New furniture unlocks new moves.'}],
+ ['safe',{ko:'내 기록은 내 폰에',en:'Your data stays yours'},{ko:'회원가입 없이 쓰고, 기록은 기기에만 저장돼요. 백업도 직접 골라서.',en:'No sign-up. Records stay on your device, and you choose where backups go.'}]];
+let L='ko';
+function setL(l){L=l;document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const v=T[l][e.dataset.i];if(v!=null)e.textContent=v});
+  document.getElementById('garden').setAttribute('aria-label',T[l].aria);document.querySelectorAll('[data-set]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.set===l));buildPals();buildFeats();try{localStorage.setItem('ujl',l)}catch(e){}}
+document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>setL(b.dataset.set));
+// 그리기 도우미: 72칸 격자를 캔버스에
+function grid(k,pose){return paDraw(pose,PA_AN[k],{})}
+function blit(ctx,g,x,y,s,flip){const H=g.length,W=g[0].length;for(let r=0;r<H;r++){let i=0;while(i<W){const c=g[r][i];if(!c){i++;continue}let e=i+1;while(e<W&&g[r][e]===c)e++;ctx.fillStyle=c;const px=flip?x+(W-e)*s:x+i*s;ctx.fillRect(Math.round(px),Math.round(y+r*s),Math.ceil((e-i)*s),Math.ceil(s));i=e}}}
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+// ---- 친구 카드 ----
+let palCards=[];
+function buildPals(){const G=document.getElementById('palGrid');G.innerHTML='';palCards=[];PALS.forEach(([k,n,d,m])=>{const b=document.createElement('button');b.type='button';b.className='pal';
+  const mv=(PET_MOTIONS[k].find(x=>x[0]===m)||[0,''])[1];
+  b.innerHTML=`<div class="st"><canvas width="72" height="72"></canvas></div><b>${n[L]}</b><small>${d[L]}</small>`;
+  const c={k,m,cv:b.querySelector('canvas'),on:false};b.onmouseenter=()=>c.on=true;b.onmouseleave=()=>{c.on=false;b.classList.remove('on')};b.onfocus=()=>c.on=true;b.onblur=()=>c.on=false;
+  b.onclick=()=>{c.on=!c.on||true;b.classList.add('on');clearTimeout(c.t);c.t=setTimeout(()=>{c.on=false;b.classList.remove('on')},2600)};palCards.push(c);G.appendChild(b)})}
+function buildFeats(){document.getElementById('featGrid').innerHTML=FEATS.map(([i,t,p])=>`<article class="feat"><div class="ic">${IC[i]}</div><h3>${t[L]}</h3><p>${p[L]}</p></article>`).join('')}
+// ---- 정원 ----
+const cv=document.getElementById('gc'),ctx=cv.getContext('2d'),gd=document.getElementById('garden');
+let W=0,H=0,S=2,DPR=1,stars=[],flowers=[];
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function resize(){DPR=Math.min(2,window.devicePixelRatio||1);const r=gd.getBoundingClientRect();W=Math.round(r.width*DPR);H=Math.round(r.height*DPR);cv.width=W;cv.height=H;
+  S=Math.max(2,Math.round(Math.min(W/7.5,H*.52)/72));stars=Array.from({length:40},()=>[Math.random()*W,Math.random()*H*.55,Math.random()*6]);
+  flowers=Array.from({length:Math.round(W/(30*DPR))},()=>[Math.random()*W,Math.random()<.5?'#ffd36b':'#ff9ab0',Math.random()]);ctx.imageSmoothingEnabled=false}
+const AG=['chick','penguin','bunny','cat','hamster','frog'].map((k,i)=>({k,x:Math.random(),dir:Math.random()<.5?-1:1,st:'walk',until:0,act:'',t0:0,lane:i%2}));
+let leaves=[],leafN=0,floaters=[];
+function special(k){const L=PET_MOTIONS[k].filter(x=>!['anSit','pgStand','pkNest','pkSleep','pkDoze','pkLook'].includes(x[0]));return L[Math.floor(Math.random()*Math.min(3,L.length))][0]}
+gd.addEventListener('click',e=>{const r=gd.getBoundingClientRect(),mx=(e.clientX-r.left)*DPR,my=(e.clientY-r.top)*DPR,sz=72*S;let best=null,bd=1e9;
+  AG.forEach(a=>{const ax=a.x*(W-sz)+sz/2,ay=groundY(a)-sz*.35,d=Math.hypot(mx-ax,my-ay);if(d<bd){bd=d;best=a}});if(!best||bd>sz*.8)return;
+  best.st='act';best.act=special(best.k);best.t0=performance.now();best.until=best.t0+2400;leafN++;document.getElementById('leafN').textContent=leafN;
+  floaters.push({x:best.x*(W-sz)+sz/2,y:groundY(best)-sz*.9,t:performance.now()})});
+function groundY(a){return H-Math.round(H*.12)-a.lane*Math.round(H*.07)}
+function drawScene(now){const sky1=css('--sky1'),sky2=css('--sky2'),star=css('--star');ctx.clearRect(0,0,W,H);
+  if(star&&star!=='#ffffff00'){stars.forEach(([x,y,p])=>{const on=Math.sin(now/600+p)>-.2;if(on){ctx.fillStyle=star;const z=Math.max(1,Math.round(S*.6));ctx.fillRect(Math.round(x),Math.round(y),z,z)}})}
+  // 언덕 · 풀 · 흙 (계단처럼 픽셀)
+  const g1=css('--grass1'),g2=css('--grass2'),s1=css('--soil'),s2=css('--soil2'),u=S*3;
+  ctx.fillStyle=g2;for(let x=0;x<W;x+=u){const h=Math.round((Math.sin(x/W*6.3+1)*.5+.5)*H*.08/u)*u;ctx.fillRect(x,H-H*.34-h,u,H*.34+h)}
+  ctx.fillStyle=g1;ctx.fillRect(0,H-Math.round(H*.26),W,Math.round(H*.26));
+  ctx.fillStyle=s1;ctx.fillRect(0,H-Math.round(H*.07),W,Math.round(H*.07));ctx.fillStyle=s2;for(let x=0;x<W;x+=u*4)ctx.fillRect(x+((x/u)%3)*u,H-Math.round(H*.035),u,u);
+  ctx.fillStyle=g2;for(let x=0;x<W;x+=u*2)ctx.fillRect(x,H-Math.round(H*.26)-u,u,u);
+  flowers.forEach(([x,c,p])=>{const y=H-Math.round(H*.2)+Math.round(p*H*.08);ctx.fillStyle='#2e9e5b';ctx.fillRect(Math.round(x),y,S,S*3);ctx.fillStyle=c;ctx.fillRect(Math.round(x)-S,y-S,S*3,S);ctx.fillRect(Math.round(x),y-S*2,S,S*3)})}
+function step(now,dt){const sz=72*S;AG.forEach(a=>{if(a.st==='walk'){a.x+=a.dir*dt*.000045*(1+a.lane*.3);if(a.x<0){a.x=0;a.dir=1}if(a.x>1){a.x=1;a.dir=-1}if(Math.random()<dt/9000){a.st='act';a.act=Math.random()<.5?special(a.k):(PET_MOTIONS[a.k][0][0]);a.t0=now;a.until=now+2000+Math.random()*2000}}
+  else if(now>a.until){a.st='walk';if(Math.random()<.4)a.dir*=-1}});
+  AG.slice().sort((p,q)=>q.lane-p.lane).forEach(a=>{const pose=a.st==='walk'?POSES.run(now+a.x*5e3):POSES[a.act](now-a.t0),g=grid(a.k,pose),x=a.x*(W-sz),gy=groundY(a),y=gy-(PA_GY*PET_K+.4)*S;
+    ctx.fillStyle='#00000038';ctx.fillRect(Math.round(x+sz*.28),Math.round(gy-S),Math.round(sz*.44),S*2);ctx.fillRect(Math.round(x+sz*.33),Math.round(gy-S*2),Math.round(sz*.34),S*4);blit(ctx,g,x,y,S,a.st==='walk'&&a.dir<0)});
+  floaters=floaters.filter(f=>now-f.t<1100);floaters.forEach(f=>{const k=(now-f.t)/1100,y=f.y-k*sz*.6;ctx.globalAlpha=1-k;ctx.fillStyle='#7fe0a2';const s=S*2;ctx.fillRect(f.x-s*2,y,s*2,s);ctx.fillRect(f.x,y,s*2,s);ctx.fillStyle='#2e9e5b';ctx.fillRect(f.x-s/2,y,s,s*2);ctx.font=`${12*DPR}px Silkscreen, monospace`;ctx.fillStyle='#fff';ctx.fillText('+1',f.x+s*2.5,y+s);ctx.globalAlpha=1})}
+// ---- 큰 친구 (출시 섹션): 순서대로 돌아가며 전용 동작 ----
+const bp=document.getElementById('bigPet').getContext('2d');let bi=0,bT=0;
+function bigTick(now){if(now-bT>2600){bT=now;bi=(bi+1)%PALS.length}const [k,,,m]=PALS[bi],g=grid(k,POSES[m](now));bp.clearRect(0,0,72,72);blit(bp,g,0,0,1,false)}
+// ---- 타이머 숫자 ----
+const tm=document.getElementById('tmr');let tsec=25*60;
+let last=0,lt=performance.now();
+function loop(now){const dt=Math.min(100,now-lt);lt=now;if(now-last>=50){last=now;drawScene(now);step(now,dt*1);palCards.forEach(c=>{const g=grid(c.k,c.on?POSES[c.m](now):POSES[PET_MOTIONS[c.k][0][0]](now)),x=c.cv.getContext('2d');x.clearRect(0,0,72,72);blit(x,g,0,0,1,false)});bigTick(now)}
+  if(!RM)requestAnimationFrame(loop)}
+setInterval(()=>{tsec=tsec>0?tsec-1:25*60;tm.textContent=String(Math.floor(tsec/60)).padStart(2,'0')+':'+String(tsec%60).padStart(2,'0')},1000);
+window.addEventListener('resize',resize);
+setTimeout(()=>{let l='ko';try{l=localStorage.getItem('ujl')||((navigator.language||'ko').toLowerCase().startsWith('ko')?'ko':'en')}catch(e){}setL(l);resize();
+  if(RM){const n=performance.now();drawScene(n);step(n,0);palCards.forEach(c=>{const g=grid(c.k,POSES[PET_MOTIONS[c.k][0][0]](0));blit(c.cv.getContext('2d'),g,0,0,1,false)});bigTick(n)}else requestAnimationFrame(loop)},40);
+})();
+
+</script>
+</body></html>

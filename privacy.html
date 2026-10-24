@@ -1,0 +1,151 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Privacy Policy · Ujjun Studio</title><meta name="description" content="유쭌 타이머 개인정보처리방침 / Ujjun Timer Privacy Policy"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Silkscreen&display=swap"><link rel="icon" href="favicon.svg"><style>/* 레이아웃: 밤하늘 아래 픽셀 정원(히어로, 실제로 움직이는 동물) → 세 걸음 → 친구들 → 기능 격자 → 출시 → 회사. 한 기둥 1120px
+   색: 밤 보라 + 새싹 초록 + 나무색. 낮(라이트)에는 아침 하늘 */
+:root{--sky1:#e9f2ff;--sky2:#fdf7ea;--bg:#fbf8f1;--panel:#ffffff;--panel2:#f3eee2;--ink:#221d33;--sub:#6b6385;--line:#e6dfcf;
+  --leaf:#2e9e5b;--leaf-hi:#7fe0a2;--wood:#a8754a;--gold:#c98a1a;--grass1:#7fcf6a;--grass2:#5fb050;--soil:#8a6040;--soil2:#6f4b31;--star:#ffffff00;
+  --f-disp:'Jua','Gowun Dodum',system-ui,sans-serif;--f-body:'Gowun Dodum','Apple SD Gothic Neo','Noto Sans KR',system-ui,sans-serif;--f-px:'Silkscreen','DotGothic16',ui-monospace,monospace;
+  --r:22px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sky1:#120f24;--sky2:#2a2150;--bg:#141126;--panel:#1d1936;--panel2:#252046;--ink:#f3eefc;--sub:#b3a9cf;--line:#322b55;
+  --leaf:#6fe08a;--leaf-hi:#9ff0b4;--wood:#c89466;--gold:#ffd36b;--grass1:#3f8f4a;--grass2:#2f6f3a;--soil:#5a3f2c;--soil2:#45301f;--star:#ffffffcc;color-scheme:dark}}
+:root[data-theme="dark"]{--sky1:#120f24;--sky2:#2a2150;--bg:#141126;--panel:#1d1936;--panel2:#252046;--ink:#f3eefc;--sub:#b3a9cf;--line:#322b55;
+  --leaf:#6fe08a;--leaf-hi:#9ff0b4;--wood:#c89466;--gold:#ffd36b;--grass1:#3f8f4a;--grass2:#2f6f3a;--soil:#5a3f2c;--soil2:#45301f;--star:#ffffffcc;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.in{max-width:1120px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--leaf);outline-offset:3px;border-radius:6px}
+.px{font-family:var(--f-px);letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+/* 상단 */
+.nav{position:absolute;inset:0 0 auto;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+.nav .in{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{width:34px;height:34px}
+.brand b{font-family:var(--f-disp);font-weight:400;font-size:20px;line-height:1}
+.navr{display:flex;align-items:center;gap:6px}
+.navr a.lk{text-decoration:none;font-size:14px;color:var(--sub);padding:6px 10px;border-radius:999px}
+.navr a.lk:hover{color:var(--ink)}
+.lang{display:flex;background:color-mix(in srgb,var(--panel) 70%,transparent);border:1px solid var(--line);border-radius:999px;padding:3px;backdrop-filter:blur(6px)}
+.lang button{font:inherit;font-size:13px;border:0;background:none;color:var(--sub);padding:4px 11px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--leaf);color:#0d2416}
+/* 히어로 */
+.hero{position:relative;overflow:hidden;background:linear-gradient(var(--sky1),var(--sky2) 78%);padding-top:calc(96px + env(safe-area-inset-top,0px))}
+.hero .copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:18px;padding-bottom:12px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--leaf);background:color-mix(in srgb,var(--leaf) 14%,transparent);padding:5px 12px;border-radius:999px}
+.eyebrow i{width:8px;height:8px;background:var(--leaf);display:inline-block;animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+h1{font-family:var(--f-disp);font-weight:400;font-size:clamp(40px,8.4vw,92px);line-height:1.04;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .g{color:var(--leaf);position:relative;white-space:nowrap}
+.hero p.lead{margin:0;max-width:34em;color:var(--sub);font-size:clamp(16px,2.2vw,19px)}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-family:var(--f-disp);font-size:17px;text-decoration:none;padding:12px 20px;border-radius:14px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);box-shadow:0 4px 0 var(--leaf);transition:transform .12s,box-shadow .12s;cursor:pointer}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--leaf)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--leaf)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none;border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink);box-shadow:none}
+.garden{position:relative;height:clamp(250px,34vw,380px);margin-top:-8px;cursor:pointer;touch-action:manipulation}
+.garden canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;display:block}
+.hud{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:18px;z-index:3;display:flex;align-items:center;gap:8px;background:#000000a0;color:#fff;padding:7px 12px;border-radius:12px;font-variant-numeric:tabular-nums;pointer-events:none}
+.hud svg{width:16px;height:16px}
+.hint{position:absolute;left:max(20px,env(safe-area-inset-left,0px));bottom:18px;z-index:3;color:#fff;background:#00000080;padding:6px 11px;border-radius:12px;font-size:13px;pointer-events:none}
+/* 섹션 공통 */
+section.s{padding-block:clamp(64px,10vw,120px)}
+.sh{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(28px,5vw,48px);max-width:640px}
+.sh .px{color:var(--leaf)}
+h2{font-family:var(--f-disp);font-weight:400;font-size:clamp(30px,5vw,52px);line-height:1.12;margin:0;text-wrap:balance}
+.sh p{margin:0;color:var(--sub);font-size:17px}
+/* 세 걸음 */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:st}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.step .num{font-family:var(--f-px);font-size:13px;color:var(--sub)}
+.step h3{font-family:var(--f-disp);font-weight:400;font-size:24px;margin:0}
+.step p{margin:0;color:var(--sub)}
+.step .vis{height:120px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;position:relative}
+.timer{font-family:var(--f-px);font-size:34px;color:var(--ink);font-variant-numeric:tabular-nums}
+.bar{position:absolute;left:16px;right:16px;bottom:18px;height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:40%;background:var(--leaf);animation:fill 6s linear infinite}
+@keyframes fill{from{width:0}to{width:100%}}
+.goals{display:flex;flex-direction:column;gap:8px;width:80%}
+.goals div{display:flex;align-items:center;gap:8px;font-size:14px}
+.goals b{width:12px;height:12px;border-radius:3px;flex:none}
+.goals span{flex:1;height:8px;border-radius:5px;background:var(--line);position:relative;overflow:hidden}
+.goals span::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:currentColor;border-radius:5px}
+.leaves{display:flex;gap:6px;align-items:flex-end}
+.leaves svg{width:46px;height:46px;animation:pop 2.4s ease-in-out infinite}
+.leaves svg:nth-child(2){animation-delay:.3s}.leaves svg:nth-child(3){animation-delay:.6s}.leaves svg:nth-child(4){animation-delay:.9s}
+@keyframes pop{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
+/* 친구들 */
+.pals{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.pal{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 10px 14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .15s,border-color .15s}
+.pal:hover,.pal.on{transform:translateY(-4px);border-color:var(--leaf)}
+.pal .st{aspect-ratio:1;border-radius:12px;background:linear-gradient(var(--panel2),color-mix(in srgb,var(--wood) 40%,var(--panel2)));position:relative;overflow:hidden;max-width:100%}
+.pal canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.pal b{font-family:var(--f-disp);font-weight:400;font-size:19px;line-height:1.1}
+.pal small{color:var(--sub);font-size:13px;line-height:1.4}
+.pal .mv{font-family:var(--f-px);font-size:10.5px;color:var(--leaf)}
+/* 기능 */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.feat .ic{width:44px;height:44px;border-radius:12px;background:var(--panel2);display:grid;place-items:center}
+.feat .ic svg{width:26px;height:26px}
+.feat h3{font-family:var(--f-disp);font-weight:400;font-size:21px;margin:0}
+.feat p{margin:0;color:var(--sub);font-size:15px}
+/* 출시 */
+.launch{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:clamp(28px,5vw,56px);display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;overflow:hidden;position:relative}
+.launch h2{font-size:clamp(28px,4.4vw,46px)}
+.launch p{color:var(--sub);margin:10px 0 22px}
+.stores{display:flex;flex-wrap:wrap;gap:10px}
+.store{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel2);min-width:0}
+.store svg{width:24px;height:24px;flex:none}
+.store b{display:block;font-size:15px;line-height:1.2}
+.store small{display:block;color:var(--sub);font-size:12px}
+.langs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.langs span{font-size:13px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,var(--leaf) 14%,transparent);color:var(--leaf)}
+.launch .pet{justify-self:center;width:min(280px,100%);aspect-ratio:1;max-width:100%}
+.launch .pet canvas{width:100%;height:100%;image-rendering:pixelated}
+/* 회사 */
+.co{display:grid;grid-template-columns:1fr 1.3fr;gap:28px;align-items:start}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:12px 22px;margin:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+dt{color:var(--sub)}dd{margin:0;min-width:0;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));color:var(--sub);font-size:14px}
+footer .in{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer nav{display:flex;gap:16px;flex-wrap:wrap}
+[hidden]{display:none!important}
+@media (max-width:900px){.pals{grid-template-columns:repeat(3,1fr)}.feats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:720px){.steps,.feats{grid-template-columns:1fr}.launch,.co{grid-template-columns:1fr}.pals{grid-template-columns:repeat(2,1fr)}.navr a.lk{display:none}.hint{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+.doc{max-width:760px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:clamp(22px,4vw,40px)}
+.doc h1{font-size:clamp(30px,5vw,44px)!important;margin-bottom:6px}
+.doc h3{font-family:var(--f-disp);font-weight:400;font-size:20px;margin:26px 0 6px}
+.doc p,.doc li{color:var(--ink);opacity:.9}.doc a{color:var(--leaf)}
+.muted{color:var(--sub);font-size:14px}
+.pv{padding-top:calc(100px + env(safe-area-inset-top,0px));padding-bottom:80px}</style></head><body><header class="nav"><div class="in">
+  <a class="brand" href="./" aria-label="Ujjun Studio"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44 Q25 32 24 22" stroke="#2e9e5b" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M24 22 C19 10 8 9 3 12 C8 22 17 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/><path d="M24 22 C29 10 40 9 45 12 C40 22 31 24 24 22Z" fill="#7fe0a2" stroke="#2e9e5b" stroke-width="2"/></svg><b data-i="brand">유쭌 스튜디오</b></a>
+  <div class="navr"><a class="lk" href="./" data-i="home">홈</a>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-set="ko" aria-pressed="true">KO</button><button type="button" data-set="en" aria-pressed="false">EN</button></div></div>
+</div></header><main class="in pv"><article class="doc" data-l="ko"><h1 style="font-size:28px">개인정보처리방침</h1><p class="muted">시행일: 2026년 10월 24일 · 적용 대상: 유쭌 타이머(이하 "앱")</p>
+<p style="margin-top:12px">유쭌 스튜디오(이하 "회사")는 이용자의 개인정보를 소중히 다루며, 「개인정보 보호법」 등 관련 법령을 지킵니다.</p>
+<h3>1. 수집하는 정보</h3><p>앱은 회원가입 없이 쓸 수 있어요. 이용자가 입력한 목표, 타이머 기록, 할 일, 메모, 꾸미기 정보는 <b>이용자의 기기 안에만</b> 저장되며 회사 서버로 보내지 않습니다.</p>
+<h3>2. 백업</h3><p>이용자가 직접 백업을 저장하면, 이용자가 고른 위치(기기 파일 또는 이용자 본인의 클라우드 저장소)에 저장됩니다. 회사는 이 백업 파일에 접근하지 않습니다.</p>
+<h3>3. 기기 권한</h3><ul><li>알림: 타이머 종료, 출석 알림을 보내기 위해 사용합니다. 거부해도 앱의 다른 기능은 쓸 수 있어요.</li></ul>
+<h3>4. 광고</h3><p>앱에는 이용자가 원할 때만 보는 보상형 광고가 있습니다. 광고를 보여주기 위해 광고 사업자(Google AdMob)가 광고 식별자, 기기 정보 등을 수집할 수 있으며, 이는 해당 사업자의 개인정보처리방침을 따릅니다. 이용자는 기기 설정에서 광고 식별자를 재설정하거나 맞춤 광고를 끌 수 있어요. <a href="https://policies.google.com/privacy" rel="noopener">Google 개인정보처리방침</a></p>
+<h3>5. 제3자 제공</h3><p>회사는 이용자의 개인정보를 제3자에게 팔거나 제공하지 않습니다. 단, 법령에 따라 요청이 있는 경우는 예외로 합니다.</p>
+<h3>6. 보관 및 삭제</h3><p>기기에 저장된 정보는 앱을 삭제하거나 앱 안에서 기록을 지우면 함께 삭제됩니다.</p>
+<h3>7. 아동의 개인정보</h3><p>회사는 만 14세 미만 아동의 개인정보를 따로 수집하지 않습니다.</p>
+<h3>8. 이용자의 권리</h3><p>이용자는 언제든 자신의 정보를 열람, 수정, 삭제할 수 있으며, 아래 연락처로 문의할 수 있어요.</p>
+<h3>9. 개인정보 보호책임자</h3><p>책임자: Jaejung Yu (대표) · 이메일: <a href="mailto:bobblue2@naver.com">bobblue2@naver.com</a></p>
+<h3>10. 방침의 변경</h3><p>로그인, 친구 기능처럼 정보를 서버에 저장하는 기능이 생기면 이 방침을 먼저 고치고 앱과 이 페이지에서 알려드립니다.</p></article><article class="doc" data-l="en" hidden><h1 style="font-size:28px">Privacy Policy</h1><p class="muted">Effective: October 24, 2026 · Applies to: Ujjun Timer (the "App")</p>
+<p style="margin-top:12px">Ujjun Studio ("we") respects your privacy and follows applicable laws, including Korea's Personal Information Protection Act.</p>
+<h3>1. Information we collect</h3><p>The App works without an account. Your goals, timer records, to-dos, notes and decorations are stored <b>only on your device</b> and are not sent to our servers.</p>
+<h3>2. Backups</h3><p>If you create a backup, it is saved where you choose (a file on your device or your own cloud storage). We do not access these files.</p>
+<h3>3. Device permissions</h3><ul><li>Notifications: used for timer and check-in reminders. You can still use the App if you decline.</li></ul>
+<h3>4. Ads</h3><p>The App offers optional rewarded ads. To show them, our ad partner (Google AdMob) may collect advertising identifiers and device information under its own policy. You can reset your advertising ID or turn off personalized ads in your device settings. <a href="https://policies.google.com/privacy" rel="noopener">Google Privacy Policy</a></p>
+<h3>5. Sharing</h3><p>We do not sell or share your personal information with third parties, except where required by law.</p>
+<h3>6. Retention and deletion</h3><p>Data stored on your device is removed when you delete the App or clear your records in the App.</p>
+<h3>7. Children</h3><p>We do not knowingly collect personal information from children under 14.</p>
+<h3>8. Your rights</h3><p>You can view, change or delete your information at any time, and contact us with any questions.</p>
+<h3>9. Contact</h3><p>Privacy officer: Jaejung Yu (Representative) · Email: <a href="mailto:bobblue2@naver.com">bobblue2@naver.com</a></p>
+<h3>10. Changes</h3><p>If we add features that store data on a server, such as sign-in or friends, we will update this policy first and let you know in the App and on this page.</p></article></main><footer><div class="in"><span>© 2026 Ujjun Studio</span><nav><a href="privacy.html" data-i="fPriv">개인정보처리방침</a><a href="mailto:bobblue2@naver.com">bobblue2@naver.com</a></nav></div></footer>
+<script>(function(){const T={ko:{brand:'유쭌 스튜디오',home:'홈',fPriv:'개인정보처리방침'},en:{brand:'Ujjun Studio',home:'Home',fPriv:'Privacy Policy'}};
+function set(l){document.documentElement.lang=l;document.querySelectorAll('[data-i]').forEach(e=>{const v=T[l][e.dataset.i];if(v)e.textContent=v});document.querySelectorAll('article[data-l]').forEach(a=>a.hidden=a.dataset.l!==l);document.querySelectorAll('[data-set]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.set===l));try{localStorage.setItem('ujl',l)}catch(e){}}
+document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>set(b.dataset.set));let l='ko';try{l=localStorage.getItem('ujl')||((navigator.language||'ko').toLowerCase().startsWith('ko')?'ko':'en')}catch(e){}set(l)})();</script></body></html>
